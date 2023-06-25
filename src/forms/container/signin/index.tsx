@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormInput, FormCheckbox } from '@forms/controls';
+import { AuthContext } from '@context/AuthContext';
+import { loginRequesting, login } from '@store/auth/actions';
+import { ErrorMessage } from '@forms/_elements/ErrorMessage';
+import { TOKEN_LOCAL_STORAGE_KEY, saveToLocalStorage } from '@utils/localStorage';
 
 import { formSchema } from './validation';
 
@@ -31,8 +35,18 @@ const SigninForm: React.FC = () => {
     formState: { errors }
   } = useForm<SigninFormFields>({ resolver: yupResolver(formSchema) });
 
-  const onSubmit = handleSubmit(async () => {
-    console.log('sign in');
+  const {
+    auth: { isLoading, error },
+    dispatch
+  } = useContext(AuthContext);
+
+  const onSubmit = handleSubmit(async (data) => {
+    dispatch(loginRequesting());
+    const response = await login(data);
+    dispatch(response);
+    if (!response.payload.error && data.isRemember) {
+      saveToLocalStorage(TOKEN_LOCAL_STORAGE_KEY, response.payload.token);
+    }
   });
 
   return (
@@ -69,13 +83,16 @@ const SigninForm: React.FC = () => {
           Remember me
         </FormCheckbox>
 
-        <button type="submit" className="btn btn-primary">
-          {'Sign In'}
+        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+          {isLoading ? 'Sign In...' : 'Sign Ind'}
         </button>
       </form>
       <h2>
         Don't have an account? <Link to="/signup">Sign up here</Link>
       </h2>
+      {!!error && (
+        <ErrorMessage className="mt-5 text-center text-danger">Something went wrong, please try again</ErrorMessage>
+      )}
     </div>
   );
 };

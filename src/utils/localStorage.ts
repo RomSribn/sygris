@@ -1,3 +1,5 @@
+export const TOKEN_LOCAL_STORAGE_KEY = 'token';
+export const THEME_LAYOUT_LOCAL_STORAGE_KEY = 'theme';
 /**
  * Load item from localstorage by key.
  * @param {string} key localStorage item key.

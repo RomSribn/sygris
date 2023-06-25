@@ -1,8 +1,12 @@
-import React, { FC } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FormInput } from '@forms/controls';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AuthContext } from '@context/AuthContext';
+import { signUpRequesting, signup } from '@store/auth/actions';
+import { ErrorMessage } from '@forms/_elements/ErrorMessage';
+import { RouteNames } from '@router/utils';
 
 import { formSchema } from './validation';
 
@@ -15,15 +19,26 @@ type SignupFormFields = {
  * Signup form with login, password and confirm password inputs
  * @returns {React.FC} react-hook-form form implementation.
  */
-const SignupForm: FC = () => {
+const SignupForm: React.FC = () => {
+  const history = useHistory();
   const {
     register,
     handleSubmit,
     formState: { errors }
   } = useForm<SignupFormFields>({ resolver: yupResolver(formSchema) });
+  const {
+    auth: { isLoading, error },
+    dispatch
+  } = useContext(AuthContext);
 
-  const onSubmit = handleSubmit(async () => {
-    console.log('sign up');
+  const onSubmit = handleSubmit(async (data) => {
+    dispatch(signUpRequesting());
+    const response = await signup(data);
+    dispatch(response);
+
+    if (!response.payload.error) {
+      history.push(RouteNames.LOGIN);
+    }
   });
 
   return (
@@ -59,14 +74,17 @@ const SignupForm: FC = () => {
           errors={errors}
         />
 
-        <button type="submit" className="btn btn-primary">
-          {'Create Account'}
+        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+          {isLoading ? 'Create Account...' : 'Create Account'}
         </button>
       </form>
       <h2>
         Already have an account?
         <Link to="/login"> Sign in here</Link>
       </h2>
+      {!!error && (
+        <ErrorMessage className="mt-5 text-center text-danger">Something went wrong, please try again</ErrorMessage>
+      )}
     </div>
   );
 };

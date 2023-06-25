@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import Layout from '@components/Layout';
+import { AuthContext } from '@context/AuthContext';
 
 import { privateRoutes, publicRoutes, RouteNames } from './utils';
 /**
@@ -8,8 +9,9 @@ import { privateRoutes, publicRoutes, RouteNames } from './utils';
  * @returns {React.FC} Layout switch routes.
  */
 const AppRouter: React.FC = () => {
+  const { auth } = useContext(AuthContext);
   const history = useHistory();
-  const isAuth = true;
+  const isAuth = !!auth.token;
 
   useEffect(() => {
     if (isAuth) {
