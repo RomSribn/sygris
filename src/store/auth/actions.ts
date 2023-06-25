@@ -1,5 +1,6 @@
-import { httpClient } from '@services/httpService';
+import { httpClient, httpClientAuthorized } from '@services/httpService';
 import { IUser } from '@utils/interfaces';
+import { saveToLocalStorage, TOKEN_LOCAL_STORAGE_KEY } from '@utils/localStorage';
 
 import { createAction } from '../utils';
 import {
@@ -8,7 +9,10 @@ import {
   AUTHENTICATE_ERROR,
   SIGNUP_REQUESTING,
   SIGNUP_SUCCESS,
-  SIGNUP_ERROR
+  SIGNUP_ERROR,
+  LOGOUT_REQUESTING,
+  LOGOUT_SUCCESS,
+  LOGOUT_ERROR
 } from './action_types';
 
 export const authRequesting = createAction(AUTHENTICATE_REQUESTING);
@@ -18,6 +22,10 @@ export const authError = createAction(AUTHENTICATE_ERROR);
 export const signupRequesting = createAction(SIGNUP_REQUESTING);
 export const signupSuccess = createAction(SIGNUP_SUCCESS);
 export const signupError = createAction(SIGNUP_ERROR);
+
+export const logoutRequesting = createAction(LOGOUT_REQUESTING);
+export const logoutSuccess = createAction(LOGOUT_SUCCESS);
+export const logoutError = createAction(LOGOUT_ERROR);
 
 export const loginRequesting = () => authRequesting({});
 export const signUpRequesting = () => signupRequesting({});
@@ -40,6 +48,16 @@ export const signup = async (data: IUser) => {
   }
 };
 
+export const logout = async (token: string) => {
+  try {
+    const response = await httpClientAuthorized(token).post('/logout');
+    saveToLocalStorage(TOKEN_LOCAL_STORAGE_KEY, '');
+    return logoutSuccess(response);
+  } catch (error) {
+    return logoutError({ error });
+  }
+};
+
 export type AuthActionTypes = ReturnType<
   | typeof authRequesting
   | typeof authSuccess
@@ -47,4 +65,7 @@ export type AuthActionTypes = ReturnType<
   | typeof signupRequesting
   | typeof signupSuccess
   | typeof signupError
+  | typeof logoutRequesting
+  | typeof logoutSuccess
+  | typeof logoutError
 >;

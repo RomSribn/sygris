@@ -1,7 +1,8 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import Layout from '@components/Layout';
-import { AuthContext } from '@context/AuthContext';
+import { AuthContext, NodeContext } from '@context/index';
+import { getNodes, nodeRequesting } from '@store/node/actions';
 
 import { privateRoutes, publicRoutes, RouteNames } from './utils';
 /**
@@ -10,16 +11,26 @@ import { privateRoutes, publicRoutes, RouteNames } from './utils';
  */
 const AppRouter: React.FC = () => {
   const { auth } = useContext(AuthContext);
+  const { dispatch } = useContext(NodeContext);
   const history = useHistory();
   const isAuth = !!auth.token;
+
+  const handleGetAllNodes = useCallback(async () => {
+    if (auth.token) {
+      dispatch(nodeRequesting({}));
+      const result = await getNodes(auth.token);
+      dispatch(result);
+    }
+  }, [auth.token, dispatch]);
 
   useEffect(() => {
     if (isAuth) {
       history.push(RouteNames.HOME);
+      handleGetAllNodes();
     } else {
       history.push(RouteNames.LOGIN);
     }
-  }, [history, isAuth]);
+  }, [handleGetAllNodes, history, isAuth]);
 
   return isAuth ? (
     <Layout>

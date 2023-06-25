@@ -11,4 +11,15 @@ const httpClient = axios.create({
   }
 });
 
-export { httpClient };
+const httpClientAuthorized = (token: string) =>
+  axios.create({
+    baseURL: APP_API_BASE_URL,
+    responseType: 'json',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+export { httpClient, httpClientAuthorized };

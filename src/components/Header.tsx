@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Navbar, Nav, Dropdown, Button } from 'react-bootstrap';
-import { ThemeConsumer } from '@context/ThemeContext';
+import { ThemeConsumer, AuthContext } from '@context/index';
+import { logout, logoutRequesting } from '@store/auth/actions';
 /**
  * Header component with theme switcher.
  * @returns {React.FC} React FC without any props.
  */
 const Header: React.FC = () => {
+  const { auth, dispatch } = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    if (!auth.token) return;
+    dispatch(logoutRequesting({}));
+    const response = await logout(auth.token);
+    dispatch(response);
+  };
+
   return (
     <header className="light-bb">
       <Navbar expand="lg">
@@ -24,6 +34,9 @@ const Header: React.FC = () => {
                   </Button>
                 )}
               </ThemeConsumer>
+              <Button variant="default" onClick={handleLogout} data-testid="darkTheme">
+                Logout
+              </Button>
             </Dropdown>
           </Nav>
         </Navbar.Collapse>

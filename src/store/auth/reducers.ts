@@ -7,7 +7,10 @@ import {
   AUTHENTICATE_ERROR,
   SIGNUP_REQUESTING,
   SIGNUP_SUCCESS,
-  SIGNUP_ERROR
+  SIGNUP_ERROR,
+  LOGOUT_REQUESTING,
+  LOGOUT_SUCCESS,
+  LOGOUT_ERROR
 } from './action_types';
 import { AuthActionTypes } from './actions';
 
@@ -56,6 +59,21 @@ const handleActions = (state: IState, action: AuthActionTypes): IState => {
       isLoading: false
     },
     [SIGNUP_ERROR]: {
+      ...state,
+      error: action.payload.error,
+      isLoading: false
+    },
+    [LOGOUT_REQUESTING]: {
+      ...state,
+      isLoading: true
+    },
+    [LOGOUT_SUCCESS]: {
+      ...state,
+      token: null,
+      email: null,
+      isLoading: false
+    },
+    [LOGOUT_ERROR]: {
       ...state,
       error: action.payload.error,
       isLoading: false
