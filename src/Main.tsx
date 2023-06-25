@@ -1,18 +1,35 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { AppRouter } from '@router/index';
+import { saveToLocalStorage } from '@utils/localStorage';
+import { ThemeProvider } from '@context/ThemeContext';
+import { TTheme } from '@utils/interfaces';
 
 import { App } from './App';
-import { Hello } from './components/Hello';
 
 export interface MainProps {
   app: App;
 }
 
-export const Main: React.FC<MainProps> = () => (
-  <Hello message="React TypeScript Webpack Starter">
-    <div className="features">
-      <div>Webpack 5 + HMR</div>
-      <div>TypeScript + React</div>
-      <div>SCSS + Autoprefixing</div>
-    </div>
-  </Hello>
-);
+const Main: React.FC<MainProps> = () => {
+  const theme: TTheme = 'light';
+
+  const handleThemeSwitch = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    saveToLocalStorage('theme', newTheme);
+  };
+
+  return (
+    <BrowserRouter>
+      <ThemeProvider
+        value={{
+          theme,
+          updateTheme: handleThemeSwitch
+        }}>
+        <AppRouter />
+      </ThemeProvider>
+    </BrowserRouter>
+  );
+};
+
+export { Main };
