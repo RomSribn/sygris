@@ -1,9 +1,8 @@
 import axios from 'axios';
-
-const APP_API_BASE_URL = 'http://sygris-assesment.fthphwfve4dreybs.westeurope.azurecontainer.io/api/v1/';
+import { apiUrl as baseURL } from '@utils/config';
 
 const httpClient = axios.create({
-  baseURL: APP_API_BASE_URL,
+  baseURL,
   responseType: 'json',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
@@ -13,7 +12,7 @@ const httpClient = axios.create({
 
 const httpClientAuthorized = (token: string) =>
   axios.create({
-    baseURL: APP_API_BASE_URL,
+    baseURL,
     responseType: 'json',
     headers: {
       'X-Requested-With': 'XMLHttpRequest',

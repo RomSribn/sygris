@@ -1,7 +1,11 @@
 const path = require('path');
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const dotenv = require('dotenv')
 const { outputConfig, copyPluginPatterns, entryConfig, devServer, alias } = require("./env.config");
+
+dotenv.config();
 
 module.exports = (env, options) => {
     return {
@@ -77,6 +81,9 @@ module.exports = (env, options) => {
                 minify: false
             }),
             new CopyPlugin(copyPluginPatterns),
+            new webpack.DefinePlugin({
+                'process.env': JSON.stringify(process.env)
+            })
         ]
     };
 };
