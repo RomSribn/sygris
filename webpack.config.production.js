@@ -1,10 +1,14 @@
 const path = require("path");
+const webpack = require('webpack');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const dotenv = require('dotenv');
 const { outputConfig, copyPluginPatterns, scssConfig, entryConfig, terserPluginConfig, alias } = require("./env.config");
+
+dotenv.config();
 
 module.exports = (env, options) => {
     return {
@@ -69,10 +73,7 @@ module.exports = (env, options) => {
         optimization: {
             minimizer: [
                 new TerserPlugin(terserPluginConfig)
-            ],
-            splitChunks: {
-                chunks: "all",
-            },
+            ]
         },
         plugins: [
             new CleanWebpackPlugin(),
@@ -83,6 +84,9 @@ module.exports = (env, options) => {
                 inject: true,
                 minify: false
             }),
+            new webpack.DefinePlugin({
+                'process.env': JSON.stringify(process.env)
+            })
         ]
     };
 };

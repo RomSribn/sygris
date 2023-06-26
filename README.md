@@ -37,7 +37,7 @@
     <a href="https://github.com/RomSribn/sygris-task"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/RomSribn/sygris-task">View Demo</a>
+    <a href="https://sygris.netlify.app">View Demo</a>
     ·
     <a href="https://github.com/RomSribn/sygris-task/issues">Report Bug</a>
     ·
@@ -69,7 +69,10 @@
 
 ### Built With
 
-[![React][React.js]][React-url]
+* [![React][React.js]][React-url]
+* [![Bootstrap][Bootstrap-shield]][Bootstrap-url]
+* [![Typescript][typescript-shield]][typescript-url]
+* [![Material UI][materialui-shield]][materialui-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -90,18 +93,17 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/RomSribn/sygris-task.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
    yarn install
    ```
-4. Enter your API in `.env`
+3. Enter your API in `.env`
    ```js
-    API_KEY=<ENTER YOUR API>;
+    APP_API_BASE_URL=<ENTER YOUR API>;
    ```
 4. Start a project
    ```js
@@ -139,8 +141,14 @@ Roman Sribnyi - romsribn@gmail.com
 [issues-shield]: https://img.shields.io/github/issues/RomSribn/sygris-task.svg?style=for-the-badge
 [issues-url]: https://github.com/RomSribn/sygris-task/issues
 [license-shield]: https://img.shields.io/github/license/RomSribn/sygris-task.svg?style=for-the-badge
-[license-url]: https://github.com/RomSribn/sygris-task/blob/master/LICENSE.txt
+[license-url]: https://github.com/RomSribn/sygris-task/blob/master/LICENSE.md
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[Bootstrap-shield]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
+[Bootstrap-url]: https://getbootstrap.com
+[materialui-shield]: https://img.shields.io/badge/Material_UI-blue
+[materialui-url]: https://mui.com/
+[typescript-shield]: https://shields.io/badge/TypeScript-3178C6?logo=TypeScript&logoColor=FFF&style=flat-square
+[typescript-url]: https://www.typescriptlang.org/
 [linkedin-url]: https://linkedin.com/in/romsribn
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
