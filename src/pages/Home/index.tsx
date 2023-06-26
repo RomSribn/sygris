@@ -1,8 +1,9 @@
 import React, { useMemo, useContext } from 'react';
 import { DataGridPro, GridColDef, DataGridProProps, GridValidRowModel } from '@mui/x-data-grid-pro';
+import Box from '@mui/material/Box';
 import { NodeContext, AuthContext } from '@context/index';
 import { buildTree, convertToMuiGridRows } from '@utils/tree';
-import { editNode, nodeEditRequesting } from '@store/node/actions';
+import { editNode, nodeEditRequesting, addNode, nodePostRequesting } from '@store/node/actions';
 import './styles.scss';
 /**
  * Home page.
@@ -21,17 +22,12 @@ const Home: React.FC = () => {
     {
       field: 'name',
       headerName: 'Name',
-      width: 300,
+      width: 100,
       editable: true
     }
   ];
 
   const getTreeDataPath: DataGridProProps['getTreeDataPath'] = (row) => row.hierarchy;
-
-  const handleRowSelection = (e, b) => {
-    console.log(e);
-    console.log(b);
-  };
 
   const processRowUpdate = async (updatedRow: GridValidRowModel, originalRow: GridValidRowModel) => {
     if (!auth.token) return originalRow;
@@ -44,20 +40,32 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleChildAdd = async (parentId: number | null) => {
+    if (!auth.token) return;
+
+    dispatch(nodePostRequesting({}));
+    const response = await addNode({ parentId, name: 'Name' }, auth.token);
+    dispatch(response);
+  };
+
   return (
     <div className="vh-100 d-flex align-items-center home-page" data-testid="home-page">
       <div className="container">
         <div className="row d-flex justify-content-center">
-          <DataGridPro
-            treeData
-            editMode="row"
-            rows={rows}
-            columns={columns}
-            getTreeDataPath={getTreeDataPath}
-            processRowUpdate={processRowUpdate}
-            onRowSelectionModelChange={handleRowSelection}
-            sx={{ color: 'inherit' }}
-          />
+          <Box sx={{ height: 400, pt: 5, width: '100%' }}>
+            <DataGridPro
+              treeData
+              editMode="row"
+              rows={rows}
+              columns={columns}
+              getTreeDataPath={getTreeDataPath}
+              processRowUpdate={processRowUpdate}
+              disableChildrenFiltering={true}
+              onCellDoubleClick={({ field, id }) => field === '__tree_data_group__' && handleChildAdd(Number(id))}
+              onColumnHeaderDoubleClick={() => handleChildAdd(null)}
+              sx={{ color: 'inherit' }}
+            />
+          </Box>
         </div>
       </div>
     </div>

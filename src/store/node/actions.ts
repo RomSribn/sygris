@@ -58,7 +58,7 @@ export const getNode = async (id: number, token: string) => {
   }
 };
 
-export const addNode = async (node: TNode, token: string) => {
+export const addNode = async (node: { name: TNode['name']; parentId: TNode['parentId'] }, token: string) => {
   try {
     const nodes = await httpClientAuthorized(token).post('/node', node);
     return nodePostSuccess(nodes.data);
