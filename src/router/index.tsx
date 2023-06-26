@@ -3,6 +3,7 @@ import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import Layout from '@components/Layout';
 import { AuthContext, NodeContext } from '@context/index';
 import { getNodes, nodeRequesting } from '@store/node/actions';
+import { logout, logoutRequesting } from '@store/auth/actions';
 
 import { privateRoutes, publicRoutes, RouteNames } from './utils';
 /**
@@ -10,18 +11,32 @@ import { privateRoutes, publicRoutes, RouteNames } from './utils';
  * @returns {React.FC} Layout switch routes.
  */
 const AppRouter: React.FC = () => {
-  const { auth } = useContext(AuthContext);
-  const { dispatch } = useContext(NodeContext);
+  const {
+    auth: { token },
+    dispatch: authDispatch
+  } = useContext(AuthContext);
+  const {
+    node: { error },
+    dispatch: nodeDispatch
+  } = useContext(NodeContext);
   const history = useHistory();
-  const isAuth = !!auth.token;
+  const isAuth = !!token;
 
   const handleGetAllNodes = useCallback(async () => {
-    if (auth.token) {
-      dispatch(nodeRequesting({}));
-      const result = await getNodes(auth.token);
-      dispatch(result);
+    if (token) {
+      nodeDispatch(nodeRequesting({}));
+      const result = await getNodes(token);
+      nodeDispatch(result);
     }
-  }, [auth.token, dispatch]);
+  }, [token, nodeDispatch]);
+
+  const handleLogOut = useCallback(async () => {
+    if (token) {
+      authDispatch(logoutRequesting({}));
+      const result = await logout(token);
+      authDispatch(result);
+    }
+  }, [authDispatch, token]);
 
   useEffect(() => {
     if (isAuth) {
@@ -31,6 +46,12 @@ const AppRouter: React.FC = () => {
       history.push(RouteNames.LOGIN);
     }
   }, [handleGetAllNodes, history, isAuth]);
+
+  useEffect(() => {
+    if (error === 'Unauthorized') {
+      handleLogOut();
+    }
+  }, [error, handleLogOut]);
 
   return isAuth ? (
     <Layout>

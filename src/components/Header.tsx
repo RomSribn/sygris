@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { Navbar, Nav, Dropdown, Button } from 'react-bootstrap';
 import { ThemeConsumer, AuthContext } from '@context/index';
 import { logout, logoutRequesting } from '@store/auth/actions';
+import LightMode from '@mui/icons-material/LightMode';
+import DarkMode from '@mui/icons-material/DarkMode';
 /**
  * Header component with theme switcher.
  * @returns {React.FC} React FC without any props.
@@ -27,9 +29,11 @@ const Header: React.FC = () => {
                 {({ theme, updateTheme }) => (
                   <Button variant="default" onClick={updateTheme} data-testid="darkTheme">
                     {theme === 'light' ? (
-                      <img data-testid="moon-icon" src="/images/moon.svg" />
+                      //   <img data-testid="moon-icon" src="/images/moon.svg" />
+                      <DarkMode color="inherit" />
                     ) : (
-                      <img data-testid="sunny-icon" src="/images/sunny.svg" />
+                      //   <img data-testid="sunny-icon" src="/images/sunny.svg" />
+                      <LightMode />
                     )}
                   </Button>
                 )}

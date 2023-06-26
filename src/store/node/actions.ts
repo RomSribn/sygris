@@ -78,7 +78,7 @@ export const removeNode = async (id: number, token: string) => {
 
 export const editNode = async (node: TNode, token: string) => {
   try {
-    const nodes = await httpClientAuthorized(token).patch(`/node/${node.id}`);
+    const nodes = await httpClientAuthorized(token).patch(`/node/${node.id}`, node);
     return nodeEditSuccess(nodes.data);
   } catch (error) {
     return nodeEditError({ error });

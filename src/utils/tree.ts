@@ -1,4 +1,5 @@
 import { TNode } from '@utils/interfaces';
+import { GridRowsProp } from '@mui/x-data-grid-pro';
 
 interface ITreeNode {
   id: number;
@@ -93,6 +94,55 @@ const addChildToTree = (tree: ITreeNode[], parentId: number, newChild: ITreeNode
     return node;
   });
 };
+/**
+ * Generate Grid Rows for mui tree table.
+ * @param tree generated from buildTree
+ * @returns {GridRowsProp} gridRowsProp (mui rows)
+ * @example
+ * 
+ const tree = [
+  {
+    id: 5,
+    name: 'Test String',
+    parentId: null,
+    children: [
+      { id: 8, name: 'string', parentId: 5, children: [] },
+      { id: 9, name: 'string', parentId: 5, children: [] }
+    ]
+  },
+  { id: 7, name: 'strin', parentId: null, children: [] }
+];
 
-export { buildTree, addChildToTree }; // helpers
+const result = [
+  { hierarchy: [5], name: 'Test String', id: 5 },
+  { hierarchy: [5, 8], name: 'string', id: 8 },
+  { hierarchy: [5, 9], name: 'string', id: 9 },
+  { hierarchy: [7], name: 'strin', id: 7 }
+];
+ *
+ */
+const convertToMuiGridRows = (tree: ITreeNode[]): GridRowsProp => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rows: any = [];
+
+  const traverseTree = (node: ITreeNode, hierarchy: number[] = []) => {
+    const { id, name, children } = node;
+
+    rows.push({
+      hierarchy: [...hierarchy, id],
+      name,
+      id
+    });
+
+    if (children) {
+      children.forEach((child) => traverseTree(child, [...hierarchy, id]));
+    }
+  };
+
+  tree.forEach((node) => traverseTree(node));
+
+  return rows;
+};
+
+export { buildTree, addChildToTree, convertToMuiGridRows }; // helpers
 export type { ITreeNode }; // types

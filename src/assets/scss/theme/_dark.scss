@@ -1,6 +1,7 @@
 .dark,
 .dark header {
   background: #131722;
+  color: #fff;
 }
 
 .dark .light-bb,
@@ -498,5 +499,9 @@
 
 .dark .news-details,
 .dark .page-content {
+  color: #fff;
+}
+
+.dark .btn {
   color: #fff;
 }

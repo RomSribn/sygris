@@ -52,7 +52,7 @@ const handleActions = (state: IState, action: NodeActionTypes): IState => {
     },
     [NODES_ALL_ERROR]: {
       ...state,
-      error: action.payload.error,
+      error: action.payload.error?.response?.statusText,
       isLoading: false
     },
     [NODE_REQUESTING]: {
@@ -66,7 +66,7 @@ const handleActions = (state: IState, action: NodeActionTypes): IState => {
     },
     [NODE_ERROR]: {
       ...state,
-      error: action.payload.error,
+      error: action.payload.error?.response?.statusText,
       isLoading: false
     },
     [NODE_POST_REQUESTING]: {
@@ -80,7 +80,7 @@ const handleActions = (state: IState, action: NodeActionTypes): IState => {
     },
     [NODE_POST_ERROR]: {
       ...state,
-      error: action.payload.error,
+      error: action.payload.error?.response?.statusText,
       isLoading: false
     },
     [NODE_EDIT_REQUESTING]: {
@@ -94,7 +94,7 @@ const handleActions = (state: IState, action: NodeActionTypes): IState => {
     },
     [NODE_EDIT_ERROR]: {
       ...state,
-      error: action.payload.error,
+      error: action.payload.error?.response?.statusText,
       isLoading: false
     },
     [NODE_REMOVE_REQUESTING]: {

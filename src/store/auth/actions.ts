@@ -50,9 +50,10 @@ export const signup = async (data: IUser) => {
 
 export const logout = async (token: string) => {
   try {
-    const response = await httpClientAuthorized(token).post('/logout');
+    // TODO: invalid logout server route
+    // const response = await httpClientAuthorized(token).post('/logout');
     saveToLocalStorage(TOKEN_LOCAL_STORAGE_KEY, '');
-    return logoutSuccess(response);
+    return logoutSuccess({});
   } catch (error) {
     return logoutError({ error });
   }
